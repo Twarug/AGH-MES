@@ -11,5 +11,7 @@ int main() {
 
     Grid grid = Grid::generate(W, H, nW, nH);
 
+    grid.print();
+
     return 0;
 }

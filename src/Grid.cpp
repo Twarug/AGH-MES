@@ -1,6 +1,23 @@
 #include "Grid.h"
 
+#include <print>
+
 namespace mes {
+
+void Grid::print() const {
+    std::println("------------- Nodes --------------");
+    i32 i = 1;
+    for (const Point& point : points)
+        std::println("{}. ({} {})", i++, point.x, point.y);
+
+    std::println("------------- Elements --------------");
+    for (const Element& element : elements) {
+        std::println("Element: {}", element.index + 1);
+        for (u64 index : element.indices)
+            std::print("    {}", index + 1);
+        std::println("");
+    }
+}
 
 Grid Grid::generate(f32 width, f32 height, u64 nW, u64 nH) {
     Grid grid {};
