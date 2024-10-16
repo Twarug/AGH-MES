@@ -19,8 +19,13 @@ void Grid::print() const {
     }
 }
 
-Grid Grid::generate(f32 width, f32 height, u64 nW, u64 nH) {
+Grid Grid::generate(GlobalData globalData) {
     Grid grid {};
+
+    f32 width = globalData.gridWidth;
+    f32 height = globalData.gridHeight;
+    u64 nW = globalData.nodesX;
+    u64 nH = globalData.nodesY;
 
     f32 deltaW = width / (nW-1);
     f32 deltaH = height / (nH-1);
