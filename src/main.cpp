@@ -1,9 +1,11 @@
+#include "GlobalData.h"
 #include "Grid.h"
 
 using namespace mes;
 
 int main() {
-    // todo: read data from file
+    GlobalData data = GlobalData::readFromFile("data.yaml");
+
     const f32 W = 4.0f;
     const f32 H = 4.0f;
     const u64 nW = 4;
