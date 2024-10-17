@@ -13,8 +13,10 @@ int main() {
 
     grid.print();
 
+    std::println("");
+
     f32 result = integration2D([](f32 x, f32 y) {
-        return -5 * x*x*y + 2 * x*y + 10;
+        return -5*x*x*y + 2 * x*y + 10;
     });
 
     std::println("Result: {}", result);
