@@ -34,7 +34,7 @@ int main() {
     grid.points.push_back({0, 0});
     grid.points.push_back({4, 0});
     grid.points.push_back({4, 4});
-    grid.points.push_back({0, 4});
+    grid.points.push_back({0, 5});
     grid.elements.push_back({0, {0, 1, 2, 3}});
 
     auto jacobians = calculateJacobian(grid, 0);
