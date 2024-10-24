@@ -1,6 +1,8 @@
 #include "Grid.h"
 
+#include <fstream>
 #include <print>
+#include <yaml-cpp/yaml.h>
 
 namespace mes {
 
@@ -19,7 +21,7 @@ void Grid::print() const {
     }
 }
 
-Grid Grid::generate(GlobalData globalData) {
+Grid Grid::generate(const GlobalData& globalData) {
     Grid grid {};
 
     f32 width = globalData.gridWidth;
@@ -47,6 +49,32 @@ Grid Grid::generate(GlobalData globalData) {
         }
 
     return grid;
+}
+
+Grid Grid::fromFile(const std::filesystem::path& filename)
+{
+    std::ifstream file(filename);
+    YAML::Node config = YAML::Load(file);
+
+    Grid data{};
+
+    YAML::Node nodes = config["nodes"];
+    for (YAML::Node node : nodes) {
+        f32 x = node["x"].as<f32>();
+        f32 y = node["y"].as<f32>();
+        data.points.push_back({ x, y });
+    }
+
+    u64 i = 0;
+    for (YAML::Node element : config["elements"]) {
+        std::array<u64, 4> indices{};
+        u64 j = 0;
+        for (YAML::Node index : element["indices"])
+            indices[j++] = index.as<u64>();
+        data.elements.push_back({ i++, indices });
+    }
+
+    return data;
 }
 
 }

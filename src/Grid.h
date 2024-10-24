@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <vector>
 
 #include "Element.h"
@@ -13,7 +14,8 @@ struct Grid {
 
     void print() const;
 
-    static Grid generate(GlobalData globalData);
+    static Grid generate(const GlobalData& globalData);
+    static Grid fromFile(const std::filesystem::path& filename);
 };
 
 }
