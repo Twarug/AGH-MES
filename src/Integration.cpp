@@ -4,12 +4,7 @@
 
 namespace mes {
 
-    struct Quadrature {
-        std::vector<f32> xs;
-        std::vector<f32> weights;
-    };
-
-    static std::vector<Quadrature> quadratureGL = {
+    std::vector<Quadrature> quadratureGL = {
         {
             { 0.0 },
             { 2.0 }
