@@ -9,7 +9,7 @@
 using namespace mes;
 
 int main() {
-    GlobalData data = GlobalData::readFromFile("data.yaml");
+    // GlobalData data = GlobalData::readFromFile("data.yaml");
 
     // Grid grid = Grid::generate(data);
     //
