@@ -1,23 +1,7 @@
 #include "Integration.h"
-
-#include <vector>
+#include "Quadratures.h"
 
 namespace mes {
-
-    std::vector<Quadrature> quadratureGL = {
-        {
-            { 0.0 },
-            { 2.0 }
-        },
-        {
-            { -0.5773502691896257, 0.5773502691896257 },
-            { 1.0, 1.0 }
-        },
-        {
-            { -0.7745966692414834, 0.0, 0.7745966692414834 },
-            { 0.5555555555555556, 0.8888888888888888, 0.5555555555555556 }
-        },
-    };
 
     f32 integration(std::function<f32(f32)> f, u32 n) {
         n--;

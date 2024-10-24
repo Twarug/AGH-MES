@@ -1,11 +1,11 @@
 #include "Jacobian.h"
 
-#include "Integration.h"
 #include "Grid.h"
 
 #include <iostream>
 #include <print>
 #include <stdexcept>
+#include <Gauss/Quadratures.h>
 
 namespace mes {
 

@@ -3,7 +3,7 @@
 
 #include "GlobalData.h"
 #include "Grid.h"
-#include "Integration.h"
+#include "gauss/Integration.h"
 #include "jacobian/Jacobian.h"
 
 using namespace mes;
