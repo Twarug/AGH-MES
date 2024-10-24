@@ -24,8 +24,7 @@ namespace mes {
         },
     };
 
-    f32 integration(std::function<f32(f32)> f, u32 n)
-    {
+    f32 integration(std::function<f32(f32)> f, u32 n) {
         n--;
         Quadrature& q = quadratureGL[n];
 

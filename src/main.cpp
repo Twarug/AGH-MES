@@ -15,11 +15,15 @@ int main() {
 
     std::println("");
 
-    f32 result = integration2D([](f32 x, f32 y) {
+    auto f = [](f32 x, f32 y) {
         return -5*x*x*y + 2 * x*y + 10;
-    });
+    };
 
-    std::println("Result: {}", result);
+    f32 result = integration2D(f, 2);
+    std::println("Result 2: {}", result);
+
+    result = integration2D(f, 3);
+    std::println("Result 3: {}", result);
 
     return 0;
 }
