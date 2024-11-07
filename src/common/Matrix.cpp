@@ -53,6 +53,20 @@ namespace mes {
         return sub;
     }
 
+    Matrix& Matrix::operator+=(const Matrix& other)
+    {
+        if (cols != other.cols || rows != other.rows)
+            throw std::runtime_error("Matrices must have the same dimensions");
+
+        for (u64 i = 0; i < rows; ++i) {
+            for (u64 j = 0; j < cols; ++j) {
+                data[i * cols + j] += other.data[i * cols + j];
+            }
+        }
+
+        return *this;
+    }
+
     f32 Matrix::determinant() const {
         if (cols != rows)
             throw std::runtime_error("Matrix is not square");

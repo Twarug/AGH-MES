@@ -23,6 +23,8 @@ namespace mes {
         f32& operator()(u64 i, u64 j) { return data[i * cols + j]; }
         f32 operator()(u64 i, u64 j) const { return data[i * cols + j]; }
 
+        Matrix& operator+=(const Matrix& other);
+
         f32 determinant() const;
 
         Matrix inverse() const;
