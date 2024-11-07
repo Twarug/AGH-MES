@@ -1,0 +1,8 @@
+
+
+# For grid generation
+gridGeneration:
+    nodesX: 4
+    nodesY: 4
+    gridWidth: 4
+    gridHeight: 6i
