@@ -8,27 +8,45 @@
 
 using namespace mes;
 
-int main() {
-    // GlobalData data = GlobalData::readFromFile("data.yaml");
+void lab1();
+void lab2();
+void lab3();
 
-    // Grid grid = Grid::generate(data);
-    //
-    // grid.print();
+int main()
+{
+    try
+    {
+        // lab1(); std::println("");
+        // lab2(); std::println("");
+        lab3(); std::println("");
+    }
+    catch (const std::runtime_error& err) {
+        std::println("[Err]: {}", err.what());
+    }
+}
 
-    // std::println("");
-    //
-    // auto f = [](f32 x, f32 y) {
-    //     return -5*x*x*y + 2 * x*y + 10;
-    // };
-    //
-    // f32 result = integration2D(f, 2);
-    // std::println("Result 2: {}", result);
-    //
-    // result = integration2D(f, 3);
-    // std::println("Result 3: {}", result);
+void lab1() {
+    GlobalData data = GlobalData::readFromFile("../data/data.yaml");
+
+    Grid grid = Grid::generate(data);
+
+    grid.print();
 
     std::println("");
 
+    auto f = [](f32 x, f32 y) {
+        return -5*x*x*y + 2 * x*y + 10;
+    };
+
+    f32 result = integration2D(f, 2);
+    std::println("Result 2: {}", result);
+
+    result = integration2D(f, 3);
+    std::println("Result 3: {}", result);
+}
+
+void lab2()
+{
     Grid grid = Grid();
 
     grid.points.push_back({0, 0});
@@ -49,6 +67,8 @@ int main() {
         std::println("  Determinant: {}", det);
         std::println("  Inverse: {}", inv);
     }
+}
 
-    return 0;
+void lab3() {
+
 }
