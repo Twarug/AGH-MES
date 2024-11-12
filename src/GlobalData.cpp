@@ -11,21 +11,24 @@ GlobalData GlobalData::readFromFile(const std::string_view& filename) {
 
     GlobalData data{};
 
-    // data.simulationTime = config["simulationTime"].as<f32>(-1.f);
-    // data.simulationStepTime = config["simulationStepTime"].as<f32>(-1.f);
-    // data.conductivity = config["conductivity"].as<f32>(-1.f);
-    // data.alpha = config["alpha"].as<f32>(-1.f);
-    // data.Tot = config["Tot"].as<f32>(-1.f);
-    //
-    // data.InitialTemp100 = config["InitialTemp100"].as<f32>(-1.f);
-    // data.Density = config["Density"].as<f32>(-1.f);
-    // data.SpecificHeat = config["SpecificHeat"].as<f32>(-1.f);
+    data.simulationTime = config["simulationTime"].as<f32>(-1.f);
+    data.simulationStepTime = config["simulationStepTime"].as<f32>(-1.f);
+    data.conductivity = config["conductivity"].as<f32>(-1.f);
+    data.alpha = config["alpha"].as<f32>(-1.f);
+    data.Tot = config["Tot"].as<f32>(-1.f);
 
-    data.nodesX = config["nodesX"].as<u64>();
-    data.nodesY = config["nodesY"].as<u64>();
+    data.InitialTemp100 = config["InitialTemp100"].as<f32>(-1.f);
+    data.Density = config["Density"].as<f32>(-1.f);
+    data.SpecificHeat = config["SpecificHeat"].as<f32>(-1.f);
 
-    data.gridWidth = config["gridWidth"].as<f32>();
-    data.gridHeight = config["gridHeight"].as<f32>();
+    auto gridGeneration = config["gridGeneration"];
+    if (gridGeneration.IsDefined()) {
+        data.nodesX = gridGeneration["nodesX"].as<u64>();
+        data.nodesY = gridGeneration["nodesY"].as<u64>();
+
+        data.gridWidth = gridGeneration["gridWidth"].as<f32>();
+        data.gridHeight = gridGeneration["gridHeight"].as<f32>();
+    }
 
     return data;
 }
