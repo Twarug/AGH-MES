@@ -85,13 +85,13 @@ namespace mes {
         }
 
         if (n == 2) {
-            return (*this)(0, 0) * (*this)(1, 1) - ((*this)(0, 1) * (*this)(1, 0));
+            return (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
         }
 
         f32 det = 0;
         for (u64 i = 0; i < n; ++i) {
             Matrix submatrix = subMatrix(0, i);
-            f32 cofactor = (i % 2 == 0) ? (*this)(0, i) : -(*this)(0, i);
+            f32 cofactor = i % 2 == 0 ? (*this)(0, i) : -(*this)(0, i);
             det += cofactor * submatrix.determinant();
         }
 

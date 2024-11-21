@@ -73,10 +73,9 @@ void lab2()
 void lab3() {
 
     GlobalData data = GlobalData::readFromFile("../data/hglobal/data.yaml");
-    Matrix dNdKsiEta(2, 4);
     Grid grid = Grid::fromFile("../data/hglobal/grid.yaml");
 
-    int N = 2;
+    constexpr int N = 2;
 
     Matrix H = Matrix(grid.points.size(), grid.points.size());
 
@@ -120,15 +119,15 @@ void lab3() {
                 std::println("    dNdX: {}", dNdX);
                 std::println("    dNdY: {}", dNdY);
 
-                Matrix H(4, 4);
+                Matrix h(4, 4);
                 for (int m = 0; m < 4; m++) {
                     for (int n = 0; n < 4; n++) {
-                        H(m, n) += (dNdX[m] * dNdX[n] + dNdY[m] * dNdY[n]) * detJ * weight * data.conductivity;
+                        h(m, n) += (dNdX[m] * dNdX[n] + dNdY[m] * dNdY[n]) * detJ * weight * data.conductivity;
                     }
                 }
 
-                // std::println("    H: {}", H);
-                Hlocal += H;
+                // std::println("    h: {}", h);
+                Hlocal += h;
             }
 
         std::println("  Hlocal: {}", Hlocal);

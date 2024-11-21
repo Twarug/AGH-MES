@@ -21,8 +21,7 @@ GlobalData GlobalData::readFromFile(const std::string_view& filename) {
     data.Density = config["Density"].as<f32>(-1.f);
     data.SpecificHeat = config["SpecificHeat"].as<f32>(-1.f);
 
-    auto gridGeneration = config["gridGeneration"];
-    if (gridGeneration.IsDefined()) {
+    if (auto gridGeneration = config["gridGeneration"]; gridGeneration.IsDefined()) {
         data.nodesX = gridGeneration["nodesX"].as<u64>();
         data.nodesY = gridGeneration["nodesY"].as<u64>();
 

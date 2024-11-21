@@ -14,7 +14,7 @@ namespace mes {
         }
 
         Matrix(const Matrix& other);
-        Matrix(Matrix&& other) : rows(other.rows), cols(other.cols), data(other.data) {
+        Matrix(Matrix&& other) noexcept : rows(other.rows), cols(other.cols), data(other.data) {
             other.data = nullptr;
         }
 
@@ -41,7 +41,7 @@ struct std::formatter<mes::Matrix, CharT>
     bool withNewline = false;
 
     template<typename ParseCtx>
-    constexpr ParseCtx::iterator parse(ParseCtx& ctx)
+    constexpr typename ParseCtx::iterator parse(ParseCtx& ctx)
     {
         auto it = ctx.begin();
         if (it != ctx.end()) {
@@ -52,7 +52,7 @@ struct std::formatter<mes::Matrix, CharT>
     }
 
     template<typename FormatCtx>
-    FormatCtx::iterator format(const mes::Matrix& m, FormatCtx& ctx) const {
+    typename FormatCtx::iterator format(const mes::Matrix& m, FormatCtx& ctx) const {
         auto out = ctx.out();
         out = format_to(out, "[");
         if (withNewline)
