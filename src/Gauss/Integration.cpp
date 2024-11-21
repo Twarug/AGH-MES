@@ -4,11 +4,10 @@
 namespace mes {
 
     f32 integration(std::function<f32(f32)> f, u32 n) {
-        n--;
-        Quadrature& q = quadratureGL[n];
+        const Quadrature& q = Quadrature::get(n - 1);
 
         double result = 0.0;
-        for (int i = 0; i < n + 1; ++i) {
+        for (int i = 0; i < n; ++i) {
             result += q.weights[i] * f(q.xs[i]);
         }
 

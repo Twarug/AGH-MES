@@ -85,7 +85,7 @@ void lab3() {
         std::println("Element: {}", element.index);
 
         Matrix Hlocal(4, 4);
-        auto& quadrature = quadratureGL[N - 1];
+        auto& quadrature = Quadrature::get(N - 1);
 
         auto jacobians = calculateJacobian(grid, element.index, N);
 
