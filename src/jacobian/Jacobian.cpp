@@ -43,10 +43,10 @@ namespace mes {
             Matrix J(2, 2);
 
             // Compute Jacobian matrix at each Gauss point
-            for (int k = 0; k < 4; ++k) {
-                int node_id = grid.elements[elementIndex].indices[k];
-                float xk = grid.points[node_id].x;
-                float yk = grid.points[node_id].y;
+            for (u64 k = 0; k < 4; ++k) {
+                u64 node_id = grid.elements[elementIndex].indices[k];
+                f32 xk = grid.points[node_id].x;
+                f32 yk = grid.points[node_id].y;
 
                 J(0, 0) += dKsi[i][k] * xk;  // ∂x/∂ξ
                 J(0, 1) += dKsi[i][k] * yk;  // ∂y/∂ξ

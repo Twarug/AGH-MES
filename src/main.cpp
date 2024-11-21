@@ -133,8 +133,8 @@ void lab3() {
 
         std::println("  Hlocal: {}", Hlocal);
 
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
+        for (int i = 0; i < Hlocal.rows; i++)
+            for (int j = 0; j < Hlocal.cols; j++)
                 H(element.indices[i], element.indices[j]) += Hlocal(i, j);
     }
 
