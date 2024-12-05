@@ -12,10 +12,10 @@ namespace mes {
 
         static const Quadrature& get(u32 n)
         {
-            if (n >= quadratures.size())
+            if (n > quadratures.size())
                 throw std::runtime_error("Quadrature of unsupported size.");
 
-            return quadratures[n];
+            return quadratures[n - 1];
         }
 
     private:

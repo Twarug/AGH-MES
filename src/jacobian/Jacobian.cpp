@@ -19,7 +19,7 @@ namespace mes {
         std::vector<std::vector<f32>> dKsi;
         std::vector<std::vector<f32>> dEta;
 
-        const Quadrature& quadrature = Quadrature::get(N - 1);
+        const Quadrature& quadrature = Quadrature::get(N);
 
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {

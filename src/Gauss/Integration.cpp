@@ -4,7 +4,7 @@
 namespace mes {
 
     f32 integration(const std::function<f32(f32)>& f, u32 n) {
-        const Quadrature& q = Quadrature::get(n - 1);
+        const Quadrature& q = Quadrature::get(n);
 
         f32 result = 0.0;
         for (int i = 0; i < n; ++i) {
