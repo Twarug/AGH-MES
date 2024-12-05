@@ -14,9 +14,11 @@ struct Element {
     Element(u64 index, std::array<u64, 4> indices) : index(index), indices(indices) {}
 
     Matrix hLocal;
+    Matrix hbcLocal;
     Matrix finalHlocal;
 
     Matrix& calculateHlocal(const Grid& grid, const GlobalData& data, i32 N);
+    Matrix& calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N);
 };
 
 }

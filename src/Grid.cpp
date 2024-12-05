@@ -62,7 +62,8 @@ Grid Grid::fromFile(const std::filesystem::path& filename)
     for (YAML::Node node : nodes) {
         f32 x = node["x"].as<f32>();
         f32 y = node["y"].as<f32>();
-        data.points.push_back({ x, y });
+        bool BC = node["BC"].as<bool>(false);
+        data.points.push_back({ x, y, BC });
     }
 
     u64 i = 0;

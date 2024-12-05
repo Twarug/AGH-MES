@@ -48,4 +48,47 @@ Matrix& Element::calculateHlocal(const Grid& grid, const GlobalData& data, i32 N
     return hLocal;
 }
 
+Matrix& Element::calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N) {
+    if (finalHlocal.cols != indices.size() || finalHlocal.rows != indices.size())
+        throw std::runtime_error(std::format("finalHlocal is not a {0}x{0} matrix", indices.size()));
+
+    hbcLocal = std::move(Matrix(indices.size(), indices.size()));
+
+    const Quadrature& quad = Quadrature::get(N);
+    std::vector<Surface> surfaces;
+
+    for (u64 i = 0; i < 4; i++)
+    {
+        const auto& point1 = grid.points[indices[i]];
+        const auto& point2 = grid.points[indices[(i + 1) % 4]];
+
+        if (point1.BC && point2.BC)
+        {
+            std::vector<f32> ksi_values, eta_values;
+
+            if (i % 2 == 0) {
+                ksi_values = quad.xs;
+                eta_values = i == 0 ? std::vector(N, -1.0f) : std::vector(N, 1.0f);
+            } else {
+                eta_values = quad.xs;
+                ksi_values = i == 1 ? std::vector(N, 1.0f) : std::vector(N, -1.0f);
+            }
+
+            surfaces.emplace_back(i, N, std::array{&point1, &point2}, quad.weights, ksi_values, eta_values);
+        }
+    }
+
+    for (auto& surface : surfaces)
+    {
+        surface.calculateN();
+        Matrix hbcSurf = surface.calculateLocalHbc(data.alpha);
+
+        hbcLocal += hbcSurf;
+    }
+
+    finalHlocal += hbcLocal;
+
+    return hbcLocal;
+}
+
 }

@@ -11,6 +11,7 @@ using namespace mes;
 void lab1();
 void lab2();
 void lab3();
+void lab4();
 
 int main()
 {
@@ -18,7 +19,8 @@ int main()
     {
         // lab1(); std::println("");
         // lab2(); std::println("");
-        lab3(); std::println("");
+        // lab3(); std::println("");
+        lab4(); std::println("");
     }
     catch (const std::runtime_error& err) {
         std::println("[Err]: {}", err.what());
@@ -89,6 +91,38 @@ void lab3() {
         for (int i = 0; i < Hlocal.rows; i++)
             for (int j = 0; j < Hlocal.cols; j++)
                 H(element.indices[i], element.indices[j]) += Hlocal(i, j);
+    }
+
+    std::println("H: {}", H);
+}
+
+void lab4() {
+
+    GlobalData data = GlobalData::readFromFile("../data/hbc/data.yaml");
+    Grid grid = Grid::fromFile("../data/hbc/grid.yaml");
+
+    constexpr int N = 4;
+
+    Matrix H = Matrix(grid.points.size(), grid.points.size());
+
+    for (auto& element : grid.elements)
+    {
+        std::println("Element: {}", element.index);
+
+        Matrix Hlocal = element.calculateHlocal(grid, data, N);
+        // std::println("  Hlocal: {}", Hlocal);
+
+        Matrix HbcLocal = element.calculateHbcLocal(grid, data, N);
+        std::println("  HLocla: {}", element.finalHlocal);
+        // std::println("  HBcLocla: {}", element.hbcLocal);
+
+
+        // std::println("finalHlocal: {}\nhLocal: {}\nhbcLocal: {}", element.finalHlocal, element.hLocal, element.hbcLocal);
+
+
+        for (int i = 0; i < Hlocal.rows; i++)
+            for (int j = 0; j < Hlocal.cols; j++)
+                H(element.indices[i], element.indices[j]) += element.finalHlocal(i, j);
     }
 
     std::println("H: {}", H);

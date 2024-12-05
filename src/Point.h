@@ -5,6 +5,7 @@ namespace mes {
 
 struct Point {
     f32 x, y;
+    bool BC;
 };
 
 }
