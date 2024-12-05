@@ -13,6 +13,23 @@ namespace mes {
         }
     }
 
+    Matrix& Matrix::operator=(const Matrix& other)
+    {
+        *this = std::move(Matrix(other));
+        return *this;
+    }
+
+    Matrix::Matrix(Matrix&& other) noexcept
+        : rows(std::exchange(other.rows, 0)), cols(std::exchange(other.cols, 0)), data(std::exchange(other.data, nullptr)) {}
+
+    Matrix& Matrix::operator=(Matrix&& other) noexcept {
+        delete[] data;
+        rows = std::exchange(other.rows, 0);
+        cols = std::exchange(other.cols, 0);
+        data = std::exchange(other.data, nullptr);
+        return *this;
+    }
+
     Matrix Matrix::inverse() const {
         if (rows != cols)
             throw std::invalid_argument("Matrix must be square to calculate inverse.");
@@ -59,6 +76,28 @@ namespace mes {
         }
 
         return sub;
+    }
+
+    Matrix Matrix::operator*(f32 scalar) const
+    {
+        Matrix value(rows, cols);
+
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                value(i, j) = this->operator()(i, j) * scalar;
+
+        return value;
+    }
+
+    Matrix& Matrix::operator*=(f32 scalar)
+    {
+        for (u64 i = 0; i < rows; ++i) {
+            for (u64 j = 0; j < cols; ++j) {
+                this->operator()(i, j) *= scalar;
+            }
+        }
+
+        return *this;
     }
 
     Matrix& Matrix::operator+=(const Matrix& other)

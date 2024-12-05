@@ -1,5 +1,6 @@
 #pragma once
 #include "Numbers.h"
+#include <utility>
 
 namespace mes {
 
@@ -9,19 +10,25 @@ namespace mes {
         u64 cols;
         f32* data;
 
+        Matrix() : rows(0), cols(0), data(nullptr) {}
+
         Matrix(u64 rows, u64 cols) : rows(rows), cols(cols) {
             data = new f32[rows * cols]();
         }
 
         Matrix(const Matrix& other);
-        Matrix(Matrix&& other) noexcept : rows(other.rows), cols(other.cols), data(other.data) {
-            other.data = nullptr;
-        }
+        Matrix& operator=(const Matrix& other);
+
+        Matrix(Matrix&& other) noexcept;
+        Matrix& operator=(Matrix&& other) noexcept;
 
         ~Matrix() { delete[] data; }
 
         f32& operator()(u64 i, u64 j) { return data[i * cols + j]; }
         f32 operator()(u64 i, u64 j) const { return data[i * cols + j]; }
+
+        Matrix operator*(f32 scalar) const;
+        Matrix& operator*=(f32 scalar);
 
         Matrix& operator+=(const Matrix& other);
 
