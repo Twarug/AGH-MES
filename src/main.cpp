@@ -4,7 +4,6 @@
 #include "GlobalData.h"
 #include "Grid.h"
 #include "gauss/Integration.h"
-#include "Gauss/Quadratures.h"
 #include "jacobian/Jacobian.h"
 
 using namespace mes;
@@ -83,52 +82,7 @@ void lab3() {
     {
         std::println("Element: {}", element.index);
 
-        Matrix Hlocal(4, 4);
-        auto& quadrature = Quadrature::get(N - 1);
-
-        auto jacobians = calculateJacobian(grid, element.index, N);
-
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++) {
-                int pcIndex = i * N + j;
-                Matrix& J = jacobians[pcIndex];
-                f32 detJ = J.determinant();
-
-                f32 ksi = quadrature.xs[i];
-                f32 eta = quadrature.xs[j];
-                f32 weight = quadrature.weights[i] * quadrature.weights[j];
-
-                Matrix dNdKsiEta = shapeFunctionDerivatives(ksi, eta);
-                Matrix invJ = J.inverse();
-
-                std::println("  pc{}", pcIndex + 1);
-                std::println("    J: {}", J);
-                std::println("    detJ: {}", detJ);
-                std::println("    invJ: {}", invJ);
-                std::println("    ksi: {}", ksi);
-                std::println("    eta: {}", eta);
-                std::println("    dNdKsiEta: {}", dNdKsiEta);
-
-                std::vector<f32> dNdX(4), dNdY(4);
-
-                for (int k = 0; k < 4; k++) {
-                    dNdX[k] = invJ(0, 0) * dNdKsiEta(0, k) + invJ(0, 1) * dNdKsiEta(1, k);
-                    dNdY[k] = invJ(1, 0) * dNdKsiEta(0, k) + invJ(1, 1) * dNdKsiEta(1, k);
-                }
-
-                std::println("    dNdX: {}", dNdX);
-                std::println("    dNdY: {}", dNdY);
-
-                Matrix h(4, 4);
-                for (int m = 0; m < 4; m++) {
-                    for (int n = 0; n < 4; n++) {
-                        h(m, n) += (dNdX[m] * dNdX[n] + dNdY[m] * dNdY[n]) * detJ * weight * data.conductivity;
-                    }
-                }
-
-                // std::println("    h: {}", h);
-                Hlocal += h;
-            }
+        Matrix Hlocal = element.calculateHlocal(grid, data, N);
 
         std::println("  Hlocal: {}", Hlocal);
 
