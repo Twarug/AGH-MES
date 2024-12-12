@@ -5,7 +5,8 @@
 #include "GlobalData.h"
 
 namespace mes {
-struct Grid;
+    struct Surface;
+    struct Grid;
 
 struct Element {
     u64 index;
@@ -17,8 +18,15 @@ struct Element {
     Matrix hbcLocal;
     Matrix finalHlocal;
 
+    std::vector<f32> Plocal;
+
     Matrix& calculateHlocal(const Grid& grid, const GlobalData& data, i32 N);
     Matrix& calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N);
+
+    std::vector<f32>& calculatePlocal(const Grid& grid, const GlobalData& data, i32 N);
+
+private:
+    std::vector<Surface> getSurfaces(const Grid& grid, i32 N) const;
 };
 
 }

@@ -4,7 +4,15 @@
 #include <array>
 
 namespace mes {
-void Surface::calculateN() {
+
+Surface::Surface(u64 id,
+    u64 num_points,
+    std::array<const Point*, 2> nodes,
+    std::vector<f32> weights,
+    std::vector<f32> ksi_values,
+    std::vector<f32> eta_values)
+: id(id), num_points(num_points), nodes(nodes), weights(weights), ksi_values(ksi_values), eta_values(eta_values)
+{
     for (int i = 0; i < num_points; i++) {
         f32 ksi = ksi_values[i];
         f32 eta = eta_values[i];
@@ -51,6 +59,28 @@ Matrix Surface::calculateLocalHbc(f32 alpha) const {
     // std::println("pc{}: {}", id + 1, Hbc_local);
 
     return Hbc_local;
+}
+
+std::vector<f32> Surface::calculatePlocal(f32 alpha, f32 Tot) const {
+    std::vector<f32> Psurf(4, 0);
+
+    f32 detJ = calculateDetJ();
+
+    for (int pc = 0; pc < num_points; ++pc)
+    {
+        std::vector<f32> temp;
+        for (int i = 0; i < 4; i++)
+        {
+            f32 val = weights[pc] * detJ * N[pc][i] * Tot * alpha;
+            temp.push_back(val);
+            Psurf[i] += val;
+        }
+        // std::println("pc{}{}: {}", id + 1, pc + 1, temp);
+    }
+
+    // std::println("pc{}: {}\n", id + 1, Psurf);
+
+    return Psurf;
 }
 
 }

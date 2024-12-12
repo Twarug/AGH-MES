@@ -12,6 +12,7 @@ void lab1();
 void lab2();
 void lab3();
 void lab4();
+void lab5();
 
 int main()
 {
@@ -20,7 +21,8 @@ int main()
         // lab1(); std::println("");
         // lab2(); std::println("");
         // lab3(); std::println("");
-        lab4(); std::println("");
+        // lab4(); std::println("");
+        lab5(); std::println("");
     }
     catch (const std::runtime_error& err) {
         std::println("[Err]: {}", err.what());
@@ -126,4 +128,27 @@ void lab4() {
     }
 
     std::println("H: {}", H);
+}
+
+void lab5() {
+
+    GlobalData data = GlobalData::readFromFile("../data/pvec/data.yaml");
+    Grid grid = Grid::fromFile("../data/pvec/grid.yaml");
+
+    constexpr int N = 3;
+
+    std::vector<f32> P = std::vector<f32>(grid.points.size(), 0);
+
+    for (auto& element : grid.elements)
+    {
+        std::println("Element: {}", element.index + 1);
+
+        std::vector<f32>& PVecLocal = element.calculatePlocal(grid, data, N);
+        std::println("  [Plocal]: {}", PVecLocal);
+
+        for (int i = 0; i < PVecLocal.size(); i++)
+            P[element.indices[i]] += PVecLocal[i];
+    }
+
+    std::println("[P]: {}", P);
 }

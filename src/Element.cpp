@@ -48,14 +48,9 @@ Matrix& Element::calculateHlocal(const Grid& grid, const GlobalData& data, i32 N
     return hLocal;
 }
 
-Matrix& Element::calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N) {
-    if (finalHlocal.cols != indices.size() || finalHlocal.rows != indices.size())
-        throw std::runtime_error(std::format("finalHlocal is not a {0}x{0} matrix", indices.size()));
-
-    hbcLocal = std::move(Matrix(indices.size(), indices.size()));
-
-    const Quadrature& quad = Quadrature::get(N);
+std::vector<Surface> Element::getSurfaces(const Grid& grid, i32 N) const {
     std::vector<Surface> surfaces;
+    const Quadrature& quad = Quadrature::get(N);
 
     for (u64 i = 0; i < 4; i++)
     {
@@ -77,10 +72,19 @@ Matrix& Element::calculateHbcLocal(const Grid& grid, const GlobalData& data, i32
             surfaces.emplace_back(i, N, std::array{&point1, &point2}, quad.weights, ksi_values, eta_values);
         }
     }
+    return surfaces;
+}
+
+Matrix& Element::calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N) {
+    if (finalHlocal.cols != indices.size() || finalHlocal.rows != indices.size())
+        throw std::runtime_error(std::format("finalHlocal is not a {0}x{0} matrix", indices.size()));
+
+    hbcLocal = std::move(Matrix(indices.size(), indices.size()));
+
+    std::vector<Surface> surfaces = getSurfaces(grid, N);
 
     for (auto& surface : surfaces)
     {
-        surface.calculateN();
         Matrix hbcSurf = surface.calculateLocalHbc(data.alpha);
 
         hbcLocal += hbcSurf;
@@ -89,6 +93,22 @@ Matrix& Element::calculateHbcLocal(const Grid& grid, const GlobalData& data, i32
     finalHlocal += hbcLocal;
 
     return hbcLocal;
+}
+
+std::vector<f32>& Element::calculatePlocal(const Grid& grid, const GlobalData& data, i32 N)
+{
+    Plocal.resize(4, 0);
+
+    std::vector<Surface> surfaces = getSurfaces(grid, N);
+
+    for (auto& surface : surfaces) {
+        std::vector<f32> Psurf = surface.calculatePlocal(data.alpha, data.Tot);
+        for (int i = 0; i < 4; i++) {
+            Plocal[i] += Psurf[i];
+        }
+    }
+
+    return Plocal;
 }
 
 }
