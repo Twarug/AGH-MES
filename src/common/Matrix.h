@@ -37,6 +37,8 @@ namespace mes {
         Matrix inverse() const;
 
         Matrix subMatrix(u64 i, u64 j) const;
+
+        void swapRows(u64 i, u64 j) const;
     };
 }
 

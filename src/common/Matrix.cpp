@@ -78,6 +78,13 @@ namespace mes {
         return sub;
     }
 
+    void Matrix::swapRows(u64 i, u64 j) const
+    {
+        for (int k = 0; k < cols; k++) {
+            std::swap(data[i * cols + k], data[j * cols + k]);
+        }
+    }
+
     Matrix Matrix::operator*(f32 scalar) const
     {
         Matrix value(rows, cols);
