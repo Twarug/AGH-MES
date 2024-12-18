@@ -3,6 +3,7 @@
 
 #include "GlobalData.h"
 #include "Grid.h"
+#include "Gauss/Elimination.h"
 #include "gauss/Integration.h"
 #include "jacobian/Jacobian.h"
 
@@ -13,6 +14,7 @@ void lab2();
 void lab3();
 void lab4();
 void lab5();
+void lab6();
 
 int main()
 {
@@ -22,7 +24,8 @@ int main()
         // lab2(); std::println("");
         // lab3(); std::println("");
         // lab4(); std::println("");
-        lab5(); std::println("");
+        // lab5(); std::println("");
+        lab6(); std::println("");
     }
     catch (const std::runtime_error& err) {
         std::println("[Err]: {}", err.what());
@@ -151,4 +154,44 @@ void lab5() {
     }
 
     std::println("[P]: {}", P);
+}
+
+void lab6() {
+    GlobalData data = GlobalData::readFromFile("../data/static/data.yaml");
+    Grid grid = Grid::fromFile("../data/static/grid.yaml");
+
+    constexpr int N = 3;
+
+    Matrix H = Matrix(grid.points.size(), grid.points.size());
+    std::vector<f32> P = std::vector<f32>(grid.points.size(), 0);
+
+    for (auto& element : grid.elements)
+    {
+        std::println("Element: {}", element.index + 1);
+
+        element.calculateHlocal(grid, data, N);
+        element.calculateHbcLocal(grid, data, N);
+
+        Matrix Hlocal = element.finalHlocal;
+        std::println("  Hlocal: {}", Hlocal);
+
+        std::vector<f32>& PVecLocal = element.calculatePlocal(grid, data, N);
+        std::println("  [Plocal]: {}", PVecLocal);
+
+        for (int i = 0; i < Hlocal.rows; i++) {
+            for (int j = 0; j < Hlocal.cols; j++)
+                H(element.indices[i], element.indices[j]) += Hlocal(i, j);
+            P[element.indices[i]] += PVecLocal[i];
+        }
+    }
+
+    std::println("H: {}", H);
+    std::println("[P]: {}", P);
+
+    for (auto& p : P)
+        p *= -1;
+
+    std::vector<f32> T = gaussianElimination(H, P);
+
+    std::println("[T]: {}", T);
 }
