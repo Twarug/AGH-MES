@@ -193,5 +193,8 @@ void lab6() {
 
     std::vector<f32> T = gaussianElimination(H, P);
 
+    for (auto& t : T)
+        t *= -1;
+
     std::println("[T]: {}", T);
 }
