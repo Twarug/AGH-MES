@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include "yaml-cpp/yaml.h"
+#include <print>
 
 namespace mes {
 
@@ -17,16 +18,22 @@ GlobalData GlobalData::readFromFile(const std::string_view& filename) {
     data.alpha = config["alpha"].as<f32>(-1.f);
     data.Tot = config["Tot"].as<f32>(-1.f);
 
-    data.InitialTemp100 = config["InitialTemp100"].as<f32>(-1.f);
-    data.Density = config["Density"].as<f32>(-1.f);
-    data.SpecificHeat = config["SpecificHeat"].as<f32>(-1.f);
+    data.initialTemp = config["initialTemp"].as<f32>(-1.f);
+    data.density = config["Density"].as<f32>(-1.f);
+    data.specificHeat = config["SpecificHeat"].as<f32>(-1.f);
 
-    if (auto gridGeneration = config["gridGeneration"]; gridGeneration.IsDefined()) {
-        data.nodesX = gridGeneration["nodesX"].as<u64>();
-        data.nodesY = gridGeneration["nodesY"].as<u64>();
-
-        data.gridWidth = gridGeneration["gridWidth"].as<f32>();
-        data.gridHeight = gridGeneration["gridHeight"].as<f32>();
+    try
+    {
+        // if (auto gridGeneration = config["gridGeneration"]; gridGeneration.IsDefined()) {
+        //     data.nodesX = gridGeneration["nodesX"].as<u64>();
+        //     data.nodesY = gridGeneration["nodesY"].as<u64>();
+        //
+        //     data.gridWidth = gridGeneration["gridWidth"].as<f32>();
+        //     data.gridHeight = gridGeneration["gridHeight"].as<f32>();
+        // }
+    } catch (...)
+    {
+        std::println("[Err]: Grid generation not found");
     }
 
     return data;

@@ -138,7 +138,7 @@ Matrix& Element::calculateCLocal(const Grid& grid, const GlobalData& data, i32 N
                 for (int b = 0; b < indices.size(); ++b) {
                     // std::println("a: {} b: {}", a, b);
                     // std::println("heat: {}, density: {}, w: {}, Ns[a]: {}, Ns[b]: {}, detJ: {}", data.SpecificHeat, data.Density, w, Ns[a], Ns[b], detJ);
-                    c_local(a, b) = data.SpecificHeat * data.Density * w * Ns[a] * Ns[b] * detJ;
+                    c_local(a, b) = data.specificHeat * data.density * w * Ns[a] * Ns[b] * detJ;
                 }
             }
             // std::println("pc{}: {}", pcIndex, c_local);

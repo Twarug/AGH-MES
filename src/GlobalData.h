@@ -11,9 +11,9 @@ struct GlobalData {
     f32 alpha;
     f32 Tot;
 
-    f32 InitialTemp100;
-    f32 Density;
-    f32 SpecificHeat;
+    f32 initialTemp;
+    f32 density;
+    f32 specificHeat;
 
     u64 nodesX, nodesY;
 
