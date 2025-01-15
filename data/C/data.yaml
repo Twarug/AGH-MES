@@ -1,0 +1,5 @@
+conductivity: 25
+alpha: 300
+Tot: 1200
+Density: 7800 # ro
+SpecificHeat: 700 # c

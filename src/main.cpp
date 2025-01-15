@@ -15,6 +15,7 @@ void lab3();
 void lab4();
 void lab5();
 void lab6();
+void lab7();
 
 int main()
 {
@@ -25,7 +26,8 @@ int main()
         // lab3(); std::println("");
         // lab4(); std::println("");
         // lab5(); std::println("");
-        lab6(); std::println("");
+        // lab6(); std::println("");
+        lab7(); std::println("");
     }
     catch (const std::runtime_error& err) {
         std::println("[Err]: {}", err.what());
@@ -198,3 +200,28 @@ void lab6() {
 
     std::println("[T]: {}", T);
 }
+
+void lab7()
+{
+    GlobalData data = GlobalData::readFromFile("../data/C/data.yaml");
+    Grid grid = Grid::fromFile("../data/C/grid.yaml");
+
+    constexpr int N = 2;
+
+
+    Matrix C = Matrix(grid.points.size(), grid.points.size());
+
+    for (auto& element : grid.elements)
+    {
+        Matrix& cLocal =  element.calculateCLocal(grid, data, N);
+
+        for (int i = 0; i < cLocal.rows; i++) {
+            for (int j = 0; j < cLocal.cols; j++)
+                C(element.indices[i], element.indices[j]) += cLocal(i, j);
+        }
+    }
+
+
+    std::println("[C]: {}", C);
+}
+

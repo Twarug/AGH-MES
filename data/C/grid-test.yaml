@@ -1,0 +1,20 @@
+nodes:
+  - x: 0.0
+    y: 0.0
+    BC: true
+
+  - x: 0.025
+    y: 0.0
+    BC: true
+
+  - x: 0.025
+    y: 0.025
+    BC: true
+
+  - x: 0.0
+    y: 0.025
+    BC: true
+
+
+elements:
+    - indices: [ 0, 1, 2, 3 ] # 0

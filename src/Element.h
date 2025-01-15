@@ -20,10 +20,14 @@ struct Element {
 
     std::vector<f32> Plocal;
 
+    Matrix cLocal;
+
     Matrix& calculateHlocal(const Grid& grid, const GlobalData& data, i32 N);
     Matrix& calculateHbcLocal(const Grid& grid, const GlobalData& data, i32 N);
 
     std::vector<f32>& calculatePlocal(const Grid& grid, const GlobalData& data, i32 N);
+
+    Matrix& calculateCLocal(const Grid& grid, const GlobalData& data, i32 N);
 
 private:
     std::vector<Surface> getSurfaces(const Grid& grid, i32 N) const;

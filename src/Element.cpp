@@ -111,4 +111,43 @@ std::vector<f32>& Element::calculatePlocal(const Grid& grid, const GlobalData& d
     return Plocal;
 }
 
+Matrix& Element::calculateCLocal(const Grid& grid, const GlobalData& data, i32 N)
+{
+    cLocal = std::move(Matrix(indices.size(), indices.size()));
+
+    const auto& quad = Quadrature::get(N);
+    auto Js = calculateJacobian(grid, index, N);
+    auto detJs = calculateDetJacobian(Js);
+
+
+    for (int i = 0; i < 2; ++i) {
+        for (int j = 0; j < 2; ++j) {
+            int pcIndex = i * N + j;
+
+            auto detJ = detJs[pcIndex];
+            double ksi = quad.xs[i];
+            double eta = quad.xs[j];
+            double w = quad.weights[i] * quad.weights[j];
+
+            auto dN_dKsiEta = shapeFunctionDerivatives(ksi, eta);
+
+            auto Ns = shapeFunction(ksi, eta);
+
+            Matrix c_local(indices.size(), indices.size());
+            for (int a = 0; a < indices.size(); ++a) {
+                for (int b = 0; b < indices.size(); ++b) {
+                    // std::println("a: {} b: {}", a, b);
+                    // std::println("heat: {}, density: {}, w: {}, Ns[a]: {}, Ns[b]: {}, detJ: {}", data.SpecificHeat, data.Density, w, Ns[a], Ns[b], detJ);
+                    c_local(a, b) = data.SpecificHeat * data.Density * w * Ns[a] * Ns[b] * detJ;
+                }
+            }
+            // std::println("pc{}: {}", pcIndex, c_local);
+            cLocal += c_local;
+        }
+    }
+
+
+    return cLocal;
+}
+
 }
