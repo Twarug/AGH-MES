@@ -29,3 +29,14 @@ struct std::formatter<std::vector<T>, CharT>
         return format_to(out, "]");
     }
 };
+
+
+namespace mes
+{
+    std::vector<f32> operator+(const std::vector<f32>& lhs, const std::vector<f32>& rhs);
+    std::vector<f32>& operator+=(std::vector<f32>& lhs, const std::vector<f32>& rhs);
+
+    std::vector<f32> operator-(const std::vector<f32>& lhs, const std::vector<f32>& rhs);
+
+    std::vector<f32>& operator*=(std::vector<f32>& lhs, const std::vector<f32>& rhs);
+}

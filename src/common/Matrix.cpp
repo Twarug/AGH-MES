@@ -107,6 +107,14 @@ namespace mes {
         return *this;
     }
 
+    Matrix Matrix::operator+(const Matrix& other) const
+    {
+        if (cols != other.cols || rows != other.rows)
+            throw std::runtime_error("Matrices must have the same dimensions");
+
+        return Matrix(*this) += other;
+    }
+
     Matrix& Matrix::operator+=(const Matrix& other)
     {
         if (cols != other.cols || rows != other.rows)
@@ -119,6 +127,22 @@ namespace mes {
         }
 
         return *this;
+    }
+
+    std::vector<f32> Matrix::operator*(const std::vector<f32>& other) const
+    {
+        if (cols != other.size())
+            throw std::runtime_error("Matrix and vector must have the same dimensions");
+
+        std::vector<f32> result(rows);
+
+        for (u64 i = 0; i < rows; ++i) {
+            for (u64 j = 0; j < cols; ++j) {
+                result[i] += (*this)(i, j) * other[j];
+            }
+        }
+
+        return result;
     }
 
     f32 Matrix::determinant() const {

@@ -1,6 +1,7 @@
 #pragma once
 #include "Numbers.h"
 #include <utility>
+#include <vector>
 
 namespace mes {
 
@@ -30,7 +31,10 @@ namespace mes {
         Matrix operator*(f32 scalar) const;
         Matrix& operator*=(f32 scalar);
 
+        Matrix operator+(const Matrix& other) const;
         Matrix& operator+=(const Matrix& other);
+
+        std::vector<f32> operator*(const std::vector<f32>& other) const;
 
         f32 determinant() const;
 
