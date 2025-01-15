@@ -41,11 +41,8 @@ Matrix Surface::calculateLocalHbc(f32 alpha) const {
             }
         }
 
-        // Debugowanie
-        if (false) {
-            std::println("Ksi: {} Eta: {} N1: {} N2: {} N3: {} N4: {}", ksi_values[i], eta_values[i], Ni[0], Ni[1], Ni[2], Ni[3]);
-            std::println("pc{}{}: {}", id + 1, i + 1, HbcPc);
-        }
+        // std::println("Ksi: {} Eta: {} N1: {} N2: {} N3: {} N4: {}", ksi_values[i], eta_values[i], Ni[0], Ni[1], Ni[2], Ni[3]);
+        // std::println("pc{}{}: {}", id + 1, i + 1, HbcPc);
 
         Hbc_local += HbcPc;
     }
@@ -61,11 +58,9 @@ std::vector<f32> Surface::calculatePlocal(f32 alpha, f32 Tot) const {
 
     f32 detJ = calculateDetJ();
 
-    for (int pc = 0; pc < num_points; ++pc)
-    {
+    for (int pc = 0; pc < num_points; ++pc) {
         std::vector<f32> temp;
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             f32 val = weights[pc] * detJ * N[pc][i] * Tot * alpha;
             temp.push_back(val);
             Psurf[i] += val;
