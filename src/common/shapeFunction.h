@@ -1,7 +1,18 @@
 #pragma once
 #include "Matrix.h"
+#include <array>
 
 namespace mes {
+
+static std::array<f32, 4> shapeFunction(f32 ksi, f32 eta)
+{
+    return {
+        0.25f * (1 - ksi) * (1 - eta),
+        0.25f * (1 + ksi) * (1 - eta),
+        0.25f * (1 + ksi) * (1 + eta),
+        0.25f * (1 - ksi) * (1 + eta)
+    };
+}
 
 static Matrix shapeFunctionDerivatives(double ksi, double eta) {
     // Macierz 4x2 przechowująca dN/dksi i dN/deta dla 4 funkcji kształtu

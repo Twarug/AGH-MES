@@ -17,12 +17,7 @@ Surface::Surface(u64 id,
         f32 ksi = ksi_values[i];
         f32 eta = eta_values[i];
 
-        N.push_back({
-            0.25f * (1 - ksi) * (1 - eta),
-            0.25f * (1 + ksi) * (1 - eta),
-            0.25f * (1 + ksi) * (1 + eta),
-            0.25f * (1 - ksi) * (1 + eta)
-        });
+        N.push_back(shapeFunction(ksi, eta));
     }
 }
 
