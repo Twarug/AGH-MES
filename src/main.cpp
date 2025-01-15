@@ -1,6 +1,7 @@
 #include <print>
 #include <ranges>
 
+#include "common/Utils.h"
 #include "GlobalData.h"
 #include "Grid.h"
 #include "Gauss/Elimination.h"
@@ -16,6 +17,7 @@ void lab4();
 void lab5();
 void lab6();
 void lab7();
+void simulation();
 
 int main()
 {
@@ -27,7 +29,8 @@ int main()
         // lab4(); std::println("");
         // lab5(); std::println("");
         // lab6(); std::println("");
-        lab7(); std::println("");
+        // lab7(); std::println("");
+        simulation(); std::println("");
     }
     catch (const std::runtime_error& err) {
         std::println("[Err]: {}", err.what());
@@ -223,5 +226,75 @@ void lab7()
 
 
     std::println("[C]: {}", C);
+}
+
+void simulation()
+{
+    GlobalData data = GlobalData::readFromFile("../data/data.yaml");
+    Grid grid = Grid::fromFile("../data/grid-mix.yaml");
+
+    constexpr int N = 2;
+
+    Matrix H = Matrix(grid.points.size(), grid.points.size());
+    std::vector<f32> P = std::vector(grid.points.size(), 0.f);
+    Matrix C = Matrix(grid.points.size(), grid.points.size());
+    std::vector<f32> T0 = std::vector(grid.points.size(), data.initialTemp);
+
+    for (auto& element : grid.elements) {
+        // std::println("Element: {}", element.index + 1);
+        element.calculateHlocal(grid, data, N);
+        element.calculateHbcLocal(grid, data, N);
+
+        Matrix Hlocal = element.finalHlocal;
+        // std::println("  Hlocal: {}", Hlocal);
+
+        std::vector<f32>& PVecLocal = element.calculatePlocal(grid, data, N);
+        // std::println("  [Plocal]: {}", PVecLocal);
+
+        Matrix& cLocal =  element.calculateCLocal(grid, data, N);
+        // std::println("  [Clocal]: {}", cLocal);
+
+        for (int i = 0; i < element.indices.size(); i++) {
+            for (int j = 0; j < element.indices.size(); j++) {
+                H(element.indices[i], element.indices[j]) += Hlocal(i, j);
+                C(element.indices[i], element.indices[j]) += cLocal(i, j);
+            }
+            P[element.indices[i]] += PVecLocal[i];
+        }
+    }
+
+    // std::println("H: {}", H);
+    // std::println("[P]: {}", P);
+    // std::println("C: {}", C);
+    // std::println("T0: {}", T0);
+
+
+    int i = 0;
+    for (float time = 0; time < data.simulationTime; time += data.simulationStepTime)
+    {
+        // std::println("Interation: {}", i++);
+        Matrix Cdt = C * (1.0 / data.simulationStepTime);
+        std::vector<f32> Ct0 = Cdt * T0 - P;
+
+        Matrix A = H + Cdt;
+        std::vector<f32> b = P + Cdt * T0;
+
+        // std::println("H: {}", A);
+        // std::println("[P]: {}", P);
+
+        std::vector<f32> T1  = gaussianElimination(A, b);
+        // std::println("T1: {}", T1);
+
+        f32 min = std::numeric_limits<f32>::max();
+        f32 max = std::numeric_limits<f32>::min();
+        for (auto& t : T1) {
+            min = std::min(min, t);
+            max = std::max(max, t);
+        }
+
+        std::println("min: {}, max: {}", min, max);
+
+        T0 = std::move(T1);
+    }
 }
 
