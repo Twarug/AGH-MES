@@ -32,16 +32,16 @@ Grid Grid::generate(const GlobalData& globalData) {
     f32 deltaW = width / (nW-1);
     f32 deltaH = height / (nH-1);
     grid.points.reserve(nW * nH);
-    for (f32 x = 0; x <= width; x += deltaW)
-        for (f32 y = 0; y <= height; y += deltaH) {
-            grid.points.push_back(Point{ x, y });
+    for (int x = 0; x < nW; x++)
+        for (int y = 0; y < nH; y++) {
+            grid.points.push_back(Point{ x * deltaW, y * deltaH, x == 0 || x == nW - 1 || y == 0 || y == nH - 1 });
         }
 
     // Elements Generation
     grid.elements.reserve((nW-1) * (nH - 1));
     for (u64 w = 0; w < nW - 1; w++)
         for (u64 h = 0; h < nH - 1; h++) {
-            u64 index = h + w * nW;
+            u64 index = h + w * (nW - 1);
             u64 basePointIndex = index + w;
             grid.elements.push_back(Element{
                 index, { basePointIndex, basePointIndex + nH, basePointIndex + nH + 1, basePointIndex + 1 }

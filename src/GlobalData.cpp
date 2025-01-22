@@ -24,13 +24,13 @@ GlobalData GlobalData::readFromFile(const std::string_view& filename) {
 
     try
     {
-        // if (auto gridGeneration = config["gridGeneration"]; gridGeneration.IsDefined()) {
-        //     data.nodesX = gridGeneration["nodesX"].as<u64>();
-        //     data.nodesY = gridGeneration["nodesY"].as<u64>();
-        //
-        //     data.gridWidth = gridGeneration["gridWidth"].as<f32>();
-        //     data.gridHeight = gridGeneration["gridHeight"].as<f32>();
-        // }
+        if (auto gridGeneration = config["gridGeneration"]; gridGeneration.IsDefined()) {
+            data.nodesX = gridGeneration["nodesX"].as<u64>();
+            data.nodesY = gridGeneration["nodesY"].as<u64>();
+
+            data.gridWidth = gridGeneration["gridWidth"].as<f32>();
+            data.gridHeight = gridGeneration["gridHeight"].as<f32>();
+        }
     } catch (...)
     {
         std::println("[Err]: Grid generation not found");
