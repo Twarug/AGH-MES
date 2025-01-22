@@ -13,49 +13,27 @@ namespace mes {
         std::vector<Matrix> jacobians;
         jacobians.reserve(N * N);
 
-        std::vector<f32> ksi;
-        std::vector<f32> eta;
-
-        std::vector<std::vector<f32>> dKsi;
-        std::vector<std::vector<f32>> dEta;
-
         const Quadrature& quadrature = Quadrature::get(N);
 
-        for (int i = 0; i < N; ++i) {
+        for (int i = 0; i < N; ++i)
             for (int j = 0; j < N; ++j) {
-                ksi.push_back(quadrature.xs[i]);
-                eta.push_back(quadrature.xs[j]);
+                Matrix J(2, 2);
+                Matrix dNdKsiEta = shapeFunctionDerivatives(quadrature.xs[i], quadrature.xs[j]);
 
-                // Derivatives of shape functions with respect to Ksi and Eta
-                dKsi.push_back({
-                    -0.25f * (1 - eta.back()),  0.25f * (1 - eta.back()),
-                     0.25f * (1 + eta.back()), -0.25f * (1 + eta.back())
-                });
-                dEta.push_back({
-                    -0.25f * (1 - ksi.back()), -0.25f * (1 + ksi.back()),
-                     0.25f * (1 + ksi.back()),  0.25f * (1 - ksi.back())
-                });
+                // Compute Jacobian matrix at each Gauss point
+                for (u64 k = 0; k < 4; ++k) {
+                    u64 node_id = grid.elements[elementIndex].indices[k];
+                    f32 xk = grid.points[node_id].x;
+                    f32 yk = grid.points[node_id].y;
+
+                    J(0, 0) += dNdKsiEta(0, k) * xk;  // ∂x/∂ξ
+                    J(0, 1) += dNdKsiEta(0, k) * yk;  // ∂y/∂ξ
+                    J(1, 0) += dNdKsiEta(1, k) * xk;  // ∂x/∂η
+                    J(1, 1) += dNdKsiEta(1, k) * yk;  // ∂y/∂η
+                }
+
+                jacobians.push_back(J);
             }
-        }
-
-
-        for (size_t i = 0; i < ksi.size(); ++i) {
-            Matrix J(2, 2);
-
-            // Compute Jacobian matrix at each Gauss point
-            for (u64 k = 0; k < 4; ++k) {
-                u64 node_id = grid.elements[elementIndex].indices[k];
-                f32 xk = grid.points[node_id].x;
-                f32 yk = grid.points[node_id].y;
-
-                J(0, 0) += dKsi[i][k] * xk;  // ∂x/∂ξ
-                J(0, 1) += dKsi[i][k] * yk;  // ∂y/∂ξ
-                J(1, 0) += dEta[i][k] * xk;  // ∂x/∂η
-                J(1, 1) += dEta[i][k] * yk;  // ∂y/∂η
-            }
-
-            jacobians.push_back(J);
-        }
 
         return jacobians;
     }
