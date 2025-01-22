@@ -232,6 +232,7 @@ void simulation()
 {
     GlobalData data = GlobalData::readFromFile("../data/data.yaml");
     Grid grid = Grid::fromFile("../data/grid-mix.yaml");
+    // Grid grid = Grid::generate(data);
 
     constexpr int N = 2;
 

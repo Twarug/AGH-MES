@@ -5,12 +5,15 @@ Density: 7800 # ro
 SpecificHeat: 700 # c
 initialTemp: 100
 
+# default
 simulationTime: 500
 simulationStepTime: 50
 
-# For grid generation
+# For grid generation 31x31
+#simulationTime: 20
+#simulationStepTime: 1
 #gridGeneration:
-#  nodesX: 4
-#  nodesY: 4
-#  gridWidth: 4
-#  gridHeight: 6i
+#  nodesX: 31
+#  nodesY: 31
+#  gridWidth: .1
+#  gridHeight: .1
